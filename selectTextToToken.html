@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Selecionar Arquivo</title>
+</head>
+
+<body>
+    <h1>Selecionar Arquivo</h1>
+    <input type="file" id="file-input">
+    <button id="tokenize-button">Tokenizar</button>
+
+    <script>
+        const fs = require('fs');
+
+        function tokenizarArquivo(caminhoArquivo) {
+            try {
+                const conteudo = fs.readFileSync(caminhoArquivo, 'utf-8');
+                const tokens = conteudo.split(/\s+/); // Regex para dividir por espaços em branco
+
+                return tokens;
+            } catch (error) {
+                console.error('Erro ao ler o arquivo:', error);
+                return [];
+            }
+        }
+
+        // Exemplo de uso
+        const caminhoArquivo = 'teste.txt';
+        const tokens = tokenizarArquivo(caminhoArquivo);
+
+        console.log(tokens);
+
+        function handleFileInputChange(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const conteudo = event.target.result;
+                const tokens = tokenizarArquivo(conteudo);
+
+                console.log(tokens);
+            };
+
+            reader.readAsText(file);
+        }
+
+        const fileInput = document.getElementById('file-input');
+        fileInput.addEventListener('change', handleFileInputChange);
+
+        const tokenizeButton = document.getElementById('tokenize-button');
+        tokenizeButton.addEventListener('click', function () {
+            fileInput.click(); // Simula o clique no input de arquivo quando o botão é clicado
+        });
+    </script>
+</body>
+
+</html>
